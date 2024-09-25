@@ -1,0 +1,8 @@
+{
+	"name": "bunrpc",
+	"module": "index.js",
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"type": "module"
+}

@@ -1,0 +1,176 @@
+import { EventEmitter } from "node:events";
+
+import ipc from "./transports/ipc.js";
+import ws from "./transports/ws.js";
+
+let socketId = 0;
+
+export default class extends EventEmitter {
+	constructor() {
+		super();
+
+		const handlers = {
+			connection: this.onConnection,
+			message: this.onMessage,
+			close: this.onClose,
+		};
+
+		// new ipc(handlers); // cant get it working on windows for some reason | error: Failed to listen at \\?\pipe\discord-ipc-0
+		new ws(handlers);
+	}
+
+	onConnection(socket) {
+		socket.send({
+			cmd: "DISPATCH",
+			data: {
+				v: 1,
+				config: {
+					cdn_host: "cdn.discordapp.com",
+					api_endpoint: "//discord.com/api",
+					environment: "production",
+				},
+				user: {
+					// mocked user
+					id: "1288207496158380042",
+					username: "bunRPC",
+					global_name: null,
+					avatar: "786220a525357da464740fb4e4733964",
+					avatar_decoration_data: null,
+					discriminator: "9677",
+					public_flags: 0,
+					clan: null,
+					flags: 0,
+					bot: false,
+					banner: "7c5909da611edc965917f64897ccfd56",
+					banner_color: null,
+					accent_color: null,
+					bio: "",
+				},
+			},
+			evt: "READY",
+			nonce: null,
+		});
+
+		socket.data.socketId = socketId++;
+
+		this.emit("connection", socket);
+	}
+
+	onClose(socket) {
+		this.emit("activity", {
+			activity: null,
+			pid: socket.data.lastPid,
+			socketId: socket.data.socketId.toString(),
+		});
+
+		this.emit("close", socket);
+	}
+
+	onMessage(socket, { cmd, args, nonce }) {
+		this.emit("message", { socket, cmd, args, nonce });
+
+		if (cmd === "CONNECTIONS_CALLBACK") {
+			return socket.send({
+				cmd,
+				data: {
+					code: 1000,
+				},
+				evt: "ERROR",
+				nonce,
+			});
+		}
+
+		if (cmd === "SET_ACTIVITY") {
+			const { activity, pid } = args;
+
+			if (!activity) {
+				this.emit("activity", {
+					activity: null,
+					pid,
+					socketId: socket.data.socketId.toString(),
+				});
+
+				return socket.send({
+					cmd,
+					data: null,
+					evt: null,
+					nonce,
+				});
+			}
+
+			socket.data.lastPid = pid ?? socket.data.lastPid;
+
+			const { buttons, timestamps, instance } = activity;
+
+			const metadata = { buttons_urls: [] };
+			const extra = { buttons: [] };
+
+			if (buttons) {
+				metadata.buttons_urls = buttons.map((button) => button.url);
+				extra.buttons = buttons.map((button) => button.label);
+			}
+
+			if (timestamps) {
+				for (const x in timestamps) {
+					const key = x;
+					// translate s -> ms timestamps
+					if (
+						timestamps[key] !== undefined &&
+						Date.now().toString().length - timestamps[key].toString().length > 2
+					)
+						timestamps[key] = Math.floor(1000 * timestamps[key]);
+				}
+			}
+
+			this.emit("activity", {
+				activity: {
+					application_id: socket.data.clientId,
+					metadata,
+					flags: instance ? 1 << 0 : 0,
+					...activity,
+					...extra,
+				},
+				pid,
+				socketId: socket.data.socketId.toString(),
+			});
+
+			return socket.send?.({
+				cmd,
+				data: {
+					...activity,
+					name: "",
+					application_id: socket.data.clientId,
+					type: 0,
+				},
+				evt: null,
+				nonce,
+			});
+		}
+
+		if (cmd === "GUILD_TEMPLATE_BROWSER" || cmd === "INVITE_BROWSER") {
+			const { code } = args;
+
+			const isInvite = cmd === "INVITE_BROWSER";
+
+			const callback = (isValid = true) => {
+				socket.send({
+					cmd,
+					data: isValid
+						? { code }
+						: {
+							code: isInvite ? 4011 : 4017,
+							message: `Invalid ${isInvite ? "invite" : "guild template"} id: ${code}`,
+						},
+					evt: isValid ? null : "ERROR",
+					nonce,
+				});
+			};
+
+			return this.emit(isInvite ? "invite" : "guild-template", code, callback);
+		}
+
+		if (cmd === "DEEP_LINK") {
+			return this.emit("link", args.params);
+		}
+	}
+}
