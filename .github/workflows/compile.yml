@@ -16,7 +16,7 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y_%m_%dT%H_%M_%S')"
+        run: echo "date=$(date +'%Y_%m_%dT%H_%M_%S')" >> $GITHUB_OUTPUT
 
       - name: Compile
         id: compile
