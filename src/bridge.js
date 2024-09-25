@@ -9,7 +9,7 @@ export const send = (msg) => {
 	}
 };
 
-Bun.serve({
+const bridge = Bun.serve({
 	port: 1337,
 	fetch(req, server) {
 		if (server.upgrade(req)) {
@@ -19,7 +19,7 @@ Bun.serve({
 		return Response.redirect("https://github.com/wont-stream/bunRPC", 301);
 	},
 	websocket: {
-		message() {},
+		message() { },
 		open(ws) {
 			clients.add(ws);
 
@@ -33,3 +33,5 @@ Bun.serve({
 		},
 	},
 });
+
+console.log(`[bunRPC] [Bridge] listening on ws://localhost:${bridge.port}`);

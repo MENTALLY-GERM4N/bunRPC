@@ -166,6 +166,7 @@ export default class {
 
 		getAvailableSocket().then((socketPath) => {
 			server.listen(socketPath);
+			console.log(`[bunRPC] [Transport] [IPC] listening on ${socketPath}`);
 		});
 	}
 

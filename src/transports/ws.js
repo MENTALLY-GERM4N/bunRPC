@@ -30,7 +30,7 @@ export default class {
 		this.handlers = handlers;
 
 		getPort().then((port) => {
-			Bun.serve({
+			const ws = Bun.serve({
 				port,
 				fetch(req, server) {
 					const params = parse(req.url.split("?")[1]);
@@ -75,6 +75,8 @@ export default class {
 					},
 				},
 			});
+
+			console.log(`[bunRPC] [Transport] [WS] listening on ws://localhost:${ws.port}`);
 		});
 	}
 }

@@ -17,6 +17,8 @@ export default class {
 
         this.scan();
         setInterval(this.scan, 10000); // every 10 seconds instead of 5
+
+        console.log("[bunRPC] [Process] Scanner started");
     }
 
     async getDB() {
