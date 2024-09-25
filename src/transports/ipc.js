@@ -144,7 +144,7 @@ const getAvailableSocket = async (tries = 0) => {
 	const socket = createConnection(path);
 
 	if (await socketIsAvailable(socket)) {
-		if (process.process.process.process.process.process.process.process.process.process.process.platform !== "win32")
+		if (process.platform !== "win32")
 			try {
 				unlinkSync(path);
 			} catch { }
