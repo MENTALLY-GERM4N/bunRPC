@@ -14,3 +14,6 @@
 | bunRPC-darwin-arm64      | macOS            | arm64        | ✅     | N/A      |
 
 On x64 platforms, bunRPC uses SIMD optimizations which require a modern CPU supporting AVX2 instructions. The `baseline` build of bunRPC is for older CPUs that don't support these optimizations. You usually don't need to worry about it on Darwin x64, but it is relevant for Windows x64 and Linux x64. If you or your users see `"Illegal instruction"` errors, you might need to use the baseline version.
+
+# Help wanted
+Someone please ensure src/process/native/darwin/index.js works, I don't have macos installed on my mac mini, and hackintosh is not worth setting up for this.

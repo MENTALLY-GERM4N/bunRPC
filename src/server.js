@@ -3,6 +3,8 @@ import { EventEmitter } from "node:events";
 import ipc from "./transports/ipc.js";
 import ws from "./transports/ws.js";
 
+import process from "./process/index.js"
+
 let socketId = 0;
 
 export default class extends EventEmitter {
@@ -19,6 +21,8 @@ export default class extends EventEmitter {
 		// Ensure you have the latest bun version installed if you encounter issues.
 		new ipc(handlers);
 		new ws(handlers);
+
+		new process(handlers);
 	}
 
 	onConnection(socket) {

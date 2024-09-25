@@ -1,16 +1,15 @@
 import { join } from "node:path";
-import { platform, env } from "node:process";
 import { unlinkSync } from "node:fs";
 
 import { createServer, createConnection } from "node:net";
 
 const SOCKET_PATH =
-	platform === "win32"
+	process.platform === "win32"
 		? "\\\\?\\pipe\\discord-ipc"
 		: join(
-				env.XDG_RUNTIME_DIR || env.TMPDIR || env.TMP || env.TEMP || "/tmp",
-				"discord-ipc",
-			);
+			process.env.XDG_RUNTIME_DIR || process.env.TMPDIR || process.env.TMP || process.env.TEMP || "/tmp",
+			"discord-ipc",
+		);
 
 const Types = {
 	HANDSHAKE: 0,
@@ -116,7 +115,7 @@ const socketIsAvailable = async (socket) => {
 		try {
 			socket.end();
 			socket.destroy();
-		} catch {}
+		} catch { }
 	};
 
 	const possibleOutcomes = Promise.race([
@@ -145,10 +144,10 @@ const getAvailableSocket = async (tries = 0) => {
 	const socket = createConnection(path);
 
 	if (await socketIsAvailable(socket)) {
-		if (platform !== "win32")
+		if (process.process.process.process.process.process.process.process.process.process.process.platform !== "win32")
 			try {
 				unlinkSync(path);
-			} catch {}
+			} catch { }
 
 		return path;
 	}
