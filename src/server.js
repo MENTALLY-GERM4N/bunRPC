@@ -15,7 +15,9 @@ export default class extends EventEmitter {
 			close: this.onClose,
 		};
 
-		// new ipc(handlers); // cant get it working on windows for some reason | error: Failed to listen at \\?\pipe\discord-ipc-0
+		// Windows: https://github.com/oven-sh/bun/pull/11378, https://github.com/oven-sh/bun/issues/11820
+		// Ensure you have the latest bun version installed if you encounter issues.
+		new ipc(handlers);
 		new ws(handlers);
 	}
 
@@ -158,9 +160,9 @@ export default class extends EventEmitter {
 					data: isValid
 						? { code }
 						: {
-								code: isInvite ? 4011 : 4017,
-								message: `Invalid ${isInvite ? "invite" : "guild template"} id: ${code}`,
-							},
+							code: isInvite ? 4011 : 4017,
+							message: `Invalid ${isInvite ? "invite" : "guild template"} id: ${code}`,
+						},
 					evt: isValid ? null : "ERROR",
 					nonce,
 				});
