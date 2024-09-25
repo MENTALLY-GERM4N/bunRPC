@@ -68,6 +68,7 @@ export default class {
 						this.handlers.connection(ws);
 					},
 					message: (ws, msg) => {
+						console.log(msg)
 						this.handlers.message(ws, JSON.parse(msg));
 					},
 					close: (ws) => {

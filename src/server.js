@@ -89,6 +89,8 @@ export default class extends EventEmitter {
 		if (cmd === "SET_ACTIVITY") {
 			const { activity, pid } = args;
 
+			socket.data.lastPid = pid ?? socket.data.lastPid;
+
 			if (!activity) {
 				this.emit("activity", {
 					activity: null,
@@ -103,8 +105,6 @@ export default class extends EventEmitter {
 					nonce,
 				});
 			}
-
-			socket.data.lastPid = pid ?? socket.data.lastPid;
 
 			const { buttons, timestamps, instance } = activity;
 
