@@ -1,15 +1,3 @@
-# bunrpc
+<img src="https://cdn.jsdelivr.net/gh/wont-stream/bunRPC@main/assets/bunRPC-Banner.png" align="center" />
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.1.22. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+<h2 align="center">OpenASAR ported to bun.</h2>
