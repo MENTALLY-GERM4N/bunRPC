@@ -1,0 +1,32 @@
+name: Compile and Publish
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y_%m_%dT%H_%M_%S')"
+
+      - name: Compile
+        id: compile
+        run: bun run compile.js
+
+      - name: Create release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: ${{ steps.date.outputs.date }}
+          title: hi ${{ steps.date.outputs.date }} release
+          files: dist/*
