@@ -3,12 +3,18 @@ import { parse } from "node:querystring";
 const portRange = [6463, 6472];
 
 const checkIfOpen = async (port) => {
-	try {
-		await fetch(`http://localhost:${port}`);
-		return true;
-	} catch (e) {
-		return false;
-	}
+	new Promise((resolve) => {
+		const ws = new WebSocket(`ws://localhost:${port}`);
+
+		ws.onopen = () => {
+			ws.close();
+			resolve(true);
+		}
+
+		ws.onerror = () => {
+			resolve(false);
+		}
+	})
 };
 
 const getPort = async () => {
