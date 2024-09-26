@@ -27,11 +27,9 @@ const bridge = Bun.serve({
 				// catch up newly connected
 				if (lastMsg[id].activity != null) send(lastMsg[id]);
 			}
-			console.log("[bunRPC] [Bridge] connection established");
 		},
 		close(ws) {
 			clients.delete(ws);
-			console.log("[bunRPC] [Bridge] connection lost");
 		},
 	},
 });

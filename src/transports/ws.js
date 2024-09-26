@@ -72,15 +72,12 @@ export default class {
 						}
 
 						this.handlers.connection(ws);
-
-						console.log("[bunRPC] [Transport] [WS] connection established");
 					},
 					message: (ws, msg) => {
 						this.handlers.message(ws, JSON.parse(msg));
 					},
 					close: (ws) => {
 						this.handlers.close(ws);
-						console.log("[bunRPC] [Transport] [WS] connection lost");
 					},
 				},
 			});

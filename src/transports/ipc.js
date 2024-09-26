@@ -202,13 +202,11 @@ export default class {
 			};
 
 			if (ver !== 1) {
-				console.log(socket.data)
 				socket.close(ErrorCodes.INVALID_VERSION);
 				return;
 			}
 
 			if (clientId === "") {
-				console.log(socket.data)
 				socket.close(ErrorCodes.INVALID_CLIENTID);
 				return;
 			}
@@ -217,7 +215,6 @@ export default class {
 
 			socket.on("close", (e) => {
 				this.handlers.close(socket);
-				console.log("[bunRPC] [Transport] [IPC] connection lost");
 			});
 
 			socket.on("request", this.onMessage.bind(this, socket));
@@ -229,8 +226,6 @@ export default class {
 
 			this.handlers.connection(socket);
 		});
-
-		console.log("[bunRPC] [Transport] [IPC] connection established");
 	}
 
 	onMessage(socket, msg) {
