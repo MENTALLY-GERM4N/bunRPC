@@ -2,6 +2,7 @@ import { parse } from "node:querystring";
 
 const portRange = [6463, 6472];
 
+// FIXME: Check using new WebSocet instead.
 const checkIfOpen = async (port) => {
 	try {
 		await fetch(`http://localhost:${port}`);
