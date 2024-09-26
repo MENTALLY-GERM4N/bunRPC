@@ -19,7 +19,7 @@ const bridge = Bun.serve({
 		return Response.redirect("https://github.com/wont-stream/bunRPC", 301);
 	},
 	websocket: {
-		message() { },
+		message() {},
 		open(ws) {
 			clients.add(ws);
 

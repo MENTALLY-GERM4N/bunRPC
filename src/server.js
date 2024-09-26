@@ -3,7 +3,7 @@ import { EventEmitter } from "node:events";
 import ipc from "./transports/ipc.js";
 import ws from "./transports/ws.js";
 
-import process from "./process/index.js"
+import process from "./process/index.js";
 
 let socketId = 0;
 
@@ -168,9 +168,9 @@ export default class extends EventEmitter {
 					data: isValid
 						? { code }
 						: {
-							code: isInvite ? 4011 : 4017,
-							message: `Invalid ${isInvite ? "invite" : "guild template"} id: ${code}`,
-						},
+								code: isInvite ? 4011 : 4017,
+								message: `Invalid ${isInvite ? "invite" : "guild template"} id: ${code}`,
+							},
 					evt: isValid ? null : "ERROR",
 					nonce,
 				});

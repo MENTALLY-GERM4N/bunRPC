@@ -7,9 +7,13 @@ const SOCKET_PATH =
 	process.platform === "win32"
 		? "\\\\?\\pipe\\discord-ipc"
 		: join(
-			process.env.XDG_RUNTIME_DIR || process.env.TMPDIR || process.env.TMP || process.env.TEMP || "/tmp",
-			"discord-ipc",
-		);
+				process.env.XDG_RUNTIME_DIR ||
+					process.env.TMPDIR ||
+					process.env.TMP ||
+					process.env.TEMP ||
+					"/tmp",
+				"discord-ipc",
+			);
 
 const Types = {
 	HANDSHAKE: 0,
@@ -115,7 +119,7 @@ const socketIsAvailable = async (socket) => {
 		try {
 			socket.end();
 			socket.destroy();
-		} catch { }
+		} catch {}
 	};
 
 	const possibleOutcomes = Promise.race([
@@ -147,7 +151,7 @@ const getAvailableSocket = async (tries = 0) => {
 		if (process.platform !== "win32")
 			try {
 				unlinkSync(path);
-			} catch { }
+			} catch {}
 
 		return path;
 	}

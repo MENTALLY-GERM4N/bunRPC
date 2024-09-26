@@ -9,12 +9,12 @@ const checkIfOpen = async (port) => {
 		ws.onopen = () => {
 			ws.close();
 			resolve(true);
-		}
+		};
 
 		ws.onerror = () => {
 			resolve(false);
-		}
-	})
+		};
+	});
 };
 
 const getPort = async () => {
@@ -82,7 +82,9 @@ export default class {
 				},
 			});
 
-			console.log(`[bunRPC] [Transport] [WS] listening on ws://localhost:${ws.port}`);
+			console.log(
+				`[bunRPC] [Transport] [WS] listening on ws://localhost:${ws.port}`,
+			);
 		});
 	}
 }
