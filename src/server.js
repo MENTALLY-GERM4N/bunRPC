@@ -11,6 +11,10 @@ export default class extends EventEmitter {
 	constructor() {
 		super();
 
+		this.onClose = this.onClose.bind(this);
+		this.onConnection = this.onConnection.bind(this);
+		this.onMessage = this.onMessage.bind(this);
+
 		const handlers = {
 			connection: this.onConnection,
 			message: this.onMessage,
