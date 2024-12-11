@@ -112,8 +112,8 @@ export default class extends EventEmitter {
 
 			const { buttons, timestamps, instance } = activity;
 
-			const metadata = { buttons_urls: [] };
-			const extra = { buttons: [] };
+			const metadata = { };
+			const extra = { };
 
 			if (buttons) {
 				metadata.buttons_urls = buttons.map((button) => button.url);

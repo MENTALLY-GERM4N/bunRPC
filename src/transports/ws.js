@@ -3,7 +3,7 @@ import { parse } from "node:querystring";
 const portRange = [6463, 6472];
 
 const checkIfOpen = async (port) => {
-	new Promise((resolve) => {
+	return new Promise((resolve) => {
 		const ws = new WebSocket(`ws://localhost:${port}`);
 
 		ws.onopen = () => {
